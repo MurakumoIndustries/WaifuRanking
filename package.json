@@ -1,0 +1,49 @@
+{
+    "name": "WaifuRanking",
+    "version": "1.0.0",
+    "description": "Murakumo Industries|Waifu Ranking",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "watch": "webpack --env.NODE_ENV=development --progress --colors --watch",
+        "build": "webpack --env.NODE_ENV=production --progress --colors --display-error-details"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/MurakumoIndustries/WaifuRanking.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/MurakumoIndustries/WaifuRanking/issues"
+    },
+    "homepage": "https://github.com/MurakumoIndustries/WaifuRanking#readme",
+    "devDependencies": {
+        "clean-webpack-plugin": "^0.1.18",
+        "copy-webpack-plugin": "^4.6.0",
+        "css-loader": "^1.0.0",
+        "expose-loader": "^0.7.5",
+        "file-loader": "^2.0.0",
+        "html-webpack-plugin": "^3.2.0",
+        "mini-css-extract-plugin": "^0.4.3",
+        "style-loader": "^0.23.0",
+        "underscore-template-loader": "^1.0.0",
+        "url-loader": "^1.1.1",
+        "vue-loader": "^15.6.1",
+        "vue-template-compiler": "^2.5.22",
+        "webpack": "^4.20.2",
+        "webpack-cli": "^3.1.2"
+    },
+    "dependencies": {
+        "bootstrap": "^4.1.3",
+        "bootstrap-select": "^1.13.3",
+        "jquery": "^3.3.1",
+        "localforage": "^1.5.6",
+        "lodash": "^4.17.11",
+        "nprogress": "^0.2.0",
+        "page": "^1.10.2",
+        "popper.js": "^1.14.4",
+        "vue": "^2.5.22"
+    }
+}
