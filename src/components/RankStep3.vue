@@ -69,42 +69,47 @@
             </div>
         </form>
         <div class="card">
-            <div id="waifuRankingTable" class="card-body container">
-                <div class="text-center">
-                    <h3>{{step3.title}}</h3>
-                </div>
-                <div>
-                    <h6>{{step3.header}}</h6>
-                </div>
-                <div>
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col"></th>
-                                <th
-                                    scope="col"
-                                    v-for="(cgroup, index) in step2.charas"
-                                    v-bind:key="index"
-                                >{{index?attributes[Number(index)]:UiGetText("actresses")}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="converter in orderedConverters" v-bind:key="converter.name">
-                                <td class="text-nowrap">{{converter.name}}</td>
-                                <td v-for="(cgroup, index) in step2.charas" v-bind:key="index">
-                                    <img
-                                        class="actress-icon"
-                                        v-for="chara in charaInRange(cgroup, converter)"
-                                        v-bind:key="chara.id"
-                                        :src="chara.icon&&('../img/chara/' + chara.icon + '.png')"
-                                    >
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="text-right">
-                    <h6>{{step3.footer}}</h6>
+            <div class="card-body">
+                <div id="waifuRankingTable" class="container">
+                    <div class="text-center">
+                        <h3>{{step3.title}}</h3>
+                    </div>
+                    <div>
+                        <h6>{{step3.header}}</h6>
+                    </div>
+                    <div>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th
+                                        scope="col"
+                                        v-for="(cgroup, index) in step2.charas"
+                                        v-bind:key="index"
+                                    >{{index?attributes[Number(index)]:UiGetText("actresses")}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="converter in orderedConverters"
+                                    v-bind:key="converter.name"
+                                >
+                                    <td class="text-nowrap">{{converter.name}}</td>
+                                    <td v-for="(cgroup, index) in step2.charas" v-bind:key="index">
+                                        <img
+                                            class="actress-icon"
+                                            v-for="chara in charaInRange(cgroup, converter)"
+                                            v-bind:key="chara.id"
+                                            :src="chara.icon&&('../img/chara/' + chara.icon + '.png')"
+                                        >
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-right">
+                        <h6>{{step3.footer}}</h6>
+                    </div>
                 </div>
             </div>
         </div>
@@ -185,11 +190,10 @@ export default {
                 .value();
             var result = [];
             for (var i = 0; i < scoreInRange.length; i++) {
-                var chara=_.find(cgroup, function(chara) {
-                        return chara.id == scoreInRange[i][0];
-                    });
-                    if(chara!=null)
-                result.push(chara);
+                var chara = _.find(cgroup, function(chara) {
+                    return chara.id == scoreInRange[i][0];
+                });
+                if (chara != null) result.push(chara);
             }
             return result;
             //return _.filter(cgroup, function(chara) {
