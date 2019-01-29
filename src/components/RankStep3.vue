@@ -134,7 +134,10 @@ export default {
         return {};
     },
     created: function() {
+        if(this.step3.converters.length<1)
+        {
         this.step3.converters.push({ name: "S", value: this.step1.min });
+        }
     },
     methods: {
         addConverter: function() {
