@@ -19,13 +19,23 @@
             v-on:step2back="step2back"
             v-on:step2complete="step2complete"
         />
+        <RankStep3
+            v-if="step2.complete"
+            v-bind:step1="step1"
+            v-bind:step2="step2"
+            v-bind:step3="step3"
+            v-on:step3back="step3back"
+        />
     </div>
 </template>
 
 <script>
+import _ from "lodash";
+
 import RankStep0 from "./RankStep0.vue";
 import RankStep1 from "./RankStep1.vue";
 import RankStep2 from "./RankStep2.vue";
+import RankStep3 from "./RankStep3.vue";
 
 export default {
     data: function() {
@@ -35,7 +45,7 @@ export default {
             },
             step1: {
                 complete: false,
-                subjects: { Score: 1 },
+                subjects: [{ name: "Score", percent: 1 }],
                 min: 1,
                 max: 5,
                 step: 1,
@@ -43,33 +53,38 @@ export default {
                 excludecollabo: false,
                 excludeanother: false,
                 getAvailableScore: function() {
+                    if (this.step < 0.0001) {
+                        return [];
+                    }
                     var list = [];
                     var current = this.min;
                     while (current <= this.max) {
                         list.push(current);
                         current += this.step;
-                        current = Math.round(current * 1000000) / 1000000;
+                        current = Math.round(current * 10000) / 10000;
                     }
                     return list;
                 }
             },
             step2: {
                 complete: false,
+                charas: {},
                 scores: {}
             },
             step3: {
-                complete: false,
-                title: "",
-                header: "",
-                footer: "",
-                converter: {}
+                title: "Title",
+                header: "Header",
+                footer: "Footer",
+                scoredisplaytype: "off",
+                converters: []
             }
         };
     },
     components: {
         RankStep0,
         RankStep1,
-        RankStep2
+        RankStep2,
+        RankStep3
     },
     methods: {
         step0complete: function() {
@@ -82,7 +97,7 @@ export default {
         step1complete: function() {
             this.step1.complete = true;
             this.step2.scores.subjectsJson = JSON.stringify(
-                this.step1.subjects
+                _.map(this.step1.subjects, "name")
             );
         },
         step2back: function() {
@@ -91,6 +106,9 @@ export default {
         },
         step2complete: function() {
             this.step2.complete = true;
+        },
+        step3back: function() {
+            this.step2.complete = false;
         }
     }
 };

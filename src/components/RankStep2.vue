@@ -8,9 +8,9 @@
                 <button type="button" class="btn btn-secondary" v-on:click="allmin">All Min</button>
             </div>
         </div>
-        <div class="row" v-for="(cgroup, index) in charas" v-bind:key="index">
-            <div class="col-12" v-if="index">
-                <h6>{{attributes[Number(index)]}}</h6>
+        <div class="row" v-for="(cgroup, index) in step2.charas" v-bind:key="index">
+            <div class="col-12 text-center" v-if="index">
+                <h5>{{attributes[Number(index)]}}</h5>
             </div>
             <CharaCard
                 v-for="chara in cgroup"
@@ -47,6 +47,9 @@ export default {
         step2: Object
     },
     data: function() {
+        return {};
+    },
+    created: function() {
         var step1 = this.step1;
         var step2 = this.step2;
         var vm = this;
@@ -101,7 +104,7 @@ export default {
             var defaultScore = {};
 
             _.each(step1.subjects, function(o, i) {
-                defaultScore[i] = step1.max;
+                defaultScore[o.name] = step1.max;
             });
             //step2.scores[o.id] = step2.scores[o.id] || defaultScore;
             vm.$set(step2.scores, o.id, step2.scores[o.id] || defaultScore);
@@ -110,12 +113,16 @@ export default {
         var finalcharas = [_.shuffle(chara4s)];
 
         if (step1.ratebyattribute) {
-            finalcharas = _.groupBy(_.shuffle(chara4s), "goodAttr");
+            finalcharas = _.chain(chara4s)
+                .shuffle()
+                .groupBy("goodAttr")
+                .toPairs()
+                .orderBy(o => o[0])
+                .fromPairs()
+                .value();
         }
 
-        return {
-            charas: finalcharas
-        };
+        step2.charas = finalcharas;
     },
     methods: {
         allmax: function() {

@@ -78,8 +78,16 @@
                                 v-model="totalScore"
                             >
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-warning">Random All</button>
-                                <button type="button" class="btn btn-secondary">Max All</button>
+                                <button
+                                    type="button"
+                                    class="btn btn-warning"
+                                    v-on:click="randomall"
+                                >Random All</button>
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    v-on:click="maxall"
+                                >Max All</button>
                             </div>
                         </div>
                     </div>
@@ -117,17 +125,21 @@ export default {
         subjectsForScore: function() {
             var list = [];
             _.each(this.step1.subjects, function(o, i) {
-                list.push(i);
+                list.push(o.name);
             });
             return list;
         },
         totalScore: function() {
             var score = this.score;
             var total = 0;
+            var totalPercent = 0;
             _.each(this.step1.subjects, function(o, i) {
-                total += score[i] * o;
+                total += score[o.name] * o.percent;
+                totalPercent += o.percent;
             });
-            return Math.round(total * 1000000) / 1000000;
+            score.totalScore =
+                Math.round((total / totalPercent) * 1000000) / 1000000;
+            return score.totalScore;
         }
     },
     methods: {
@@ -146,6 +158,23 @@ export default {
             var vm = this;
             var available = this.step1.getAvailableScore();
             vm.$set(score, subject, _.sample(available));
+        },
+        randomall: function() {
+            var score = this.score;
+            var vm = this;
+            var available = this.step1.getAvailableScore();
+            _.each(score, function(o, j) {
+                vm.$set(score, j, _.sample(available));
+            });
+        },
+        maxall: function(subject) {
+            var score = this.score;
+            var vm = this;
+            var available = this.step1.getAvailableScore();
+            var max = this.step1.max;
+            _.each(score, function(o, j) {
+                vm.$set(score, j, max);
+            });
         }
     }
 };

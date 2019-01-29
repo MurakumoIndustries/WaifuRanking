@@ -4,14 +4,28 @@
         <form>
             <div class="form-group">
                 <label>Rate Subjects</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="subjectsjson"
+                <div
+                    class="input-group"
+                    v-for="subject in step1.subjects"
+                    v-bind:key="subject.name"
                 >
-                <small
-                    class="form-text text-muted"
-                >Sample:{"Character":0.6,"Weapon":0.2,"Gear":"0.2"}</small>
+                    <div class="input-group-prepend">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            :disabled="step1.subjects.length<=1"
+                            v-on:click="delSubject(subject.name)"
+                        >-</button>
+                        <button type="button" class="btn btn-secondary" v-on:click="addSubject()">+</button>
+                    </div>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model.lazy="subject.name"
+                        v-on:change="changeSubject()"
+                    >
+                    <input type="number" class="form-control" v-model.lazy.number="subject.percent">
+                </div>
             </div>
             <div class="form-group">
                 <label>Score Range</label>
@@ -56,6 +70,9 @@
                         </div>
                     </div>
                 </div>
+                <small
+                    class="form-text text-muted text-truncate"
+                >Available Score:{{step1.getAvailableScore().join(', ')}}</small>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -95,20 +112,20 @@ export default {
         step2: Object
     },
     data: function() {
-        return {
-            subjectsjson: JSON.stringify(this.step1.subjects)
-        };
+        return {};
     },
-    methods: {},
-    watch: {
-        subjectsjson: function() {
-            try {
-                this.step1.subjects = JSON.parse(this.subjectsjson);
-            } catch {
-                this.step1.subjects = { Score: 1 };
-            }
+    methods: {
+        addSubject: function() {
+            this.step1.subjects.push({ name: "", percent: 0 });
+        },
+        delSubject: function(name) {
+            this.step1.subjects = this.step1.subjects.filter(function(item) {
+                return item.name != name;
+            });
+        },
+        changeSubject: function() {
             if (
-                JSON.stringify(this.step1.subjects) !=
+                JSON.stringify(_.map(this.step1.subjects, "name")) !=
                 this.step2.scores.subjectsJson
             ) {
                 this.step2.scores = {};
