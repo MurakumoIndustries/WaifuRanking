@@ -85,7 +85,7 @@
                                     scope="col"
                                     v-for="(cgroup, index) in step2.charas"
                                     v-bind:key="index"
-                                >{{index?attributes[Number(index)]:"Chara"}}</th>
+                                >{{index?attributes[Number(index)]:UiGetText("actresses")}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,21 +165,36 @@ export default {
                 max = this.orderedConverters[converterindex - 1].value;
             }
             var scores = this.step2.scores;
-            var scoreInRange = _.filter(_.toPairs(scores), function(scorePair) {
-                if (scorePair[0] == "subjectsJson") {
-                    return false;
-                }
-                if (scorePair[1].totalScore < min) {
-                    return false;
-                }
-                if (max != null && scorePair[1].totalScore >= max) {
-                    return false;
-                }
-                return true;
-            });
-            return _.filter(cgroup, function(chara) {
-                return _.map(scoreInRange, 0).indexOf(chara.id + "") >= 0;
-            });
+            var scoreInRange = _.chain(scores)
+                .toPairs()
+                .filter(function(scorePair) {
+                    if (scorePair[0] == "subjectsJson") {
+                        return false;
+                    }
+                    if (scorePair[1].totalScore < min) {
+                        return false;
+                    }
+                    if (max != null && scorePair[1].totalScore >= max) {
+                        return false;
+                    }
+                    return true;
+                })
+                .orderBy(function(o) {
+                    return o[1].totalScore;
+                }, "desc")
+                .value();
+            var result = [];
+            for (var i = 0; i < scoreInRange.length; i++) {
+                result.push(
+                    _.find(cgroup, function(chara) {
+                        return chara.id == scoreInRange[i][0];
+                    })
+                );
+            }
+            return result;
+            //return _.filter(cgroup, function(chara) {
+            //                return _.map(scoreInRange, 0).indexOf(chara.id + "") >= 0;
+            //          });
         },
         generate: function() {
             var w = window.open("about:blank;", "_blank");
@@ -194,6 +209,9 @@ export default {
                 .catch(function(error) {
                     console.error("generate error", error);
                 });
+        },
+        UiGetText: function(key, key2) {
+            return Ui.getText(key, key2);
         }
     },
     computed: {
