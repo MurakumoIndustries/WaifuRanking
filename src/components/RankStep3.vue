@@ -185,11 +185,11 @@ export default {
                 .value();
             var result = [];
             for (var i = 0; i < scoreInRange.length; i++) {
-                result.push(
-                    _.find(cgroup, function(chara) {
+                var chara=_.find(cgroup, function(chara) {
                         return chara.id == scoreInRange[i][0];
-                    })
-                );
+                    });
+                    if(chara!=null)
+                result.push(chara);
             }
             return result;
             //return _.filter(cgroup, function(chara) {
