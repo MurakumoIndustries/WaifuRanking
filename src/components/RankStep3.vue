@@ -1,6 +1,6 @@
 <template>
     <div class="py-3">
-        <h5>Settings</h5>
+        <h5>Generate</h5>
         <form>
             <div class="form-group">
                 <label>Title</label>
@@ -69,7 +69,7 @@
             </div>
         </form>
         <div class="card">
-            <div id="waifuRankingTable" class="card-body">
+            <div id="waifuRankingTable" class="card-body container">
                 <div class="text-center">
                     <h3>{{step3.title}}</h3>
                 </div>
@@ -134,9 +134,8 @@ export default {
         return {};
     },
     created: function() {
-        if(this.step3.converters.length<1)
-        {
-        this.step3.converters.push({ name: "S", value: this.step1.min });
+        if (this.step3.converters.length < 1) {
+            this.step3.converters.push({ name: "S", value: this.step1.min });
         }
     },
     methods: {
