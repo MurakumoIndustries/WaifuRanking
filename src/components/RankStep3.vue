@@ -90,7 +90,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="converter in orderedConverters" v-bind:key="converter.name">
-                                <td>{{converter.name}}</td>
+                                <td class="text-nowrap">{{converter.name}}</td>
                                 <td v-for="(cgroup, index) in step2.charas" v-bind:key="index">
                                     <img
                                         class="actress-icon"
