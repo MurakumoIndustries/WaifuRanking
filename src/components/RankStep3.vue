@@ -60,6 +60,12 @@
                     </div>
                     <input type="text" class="form-control" v-model.lazy="converter.name">
                     <input
+                        type="text"
+                        class="form-control"
+                        placeholder="description"
+                        v-model.lazy="converter.desc"
+                    >
+                    <input
                         type="number"
                         class="form-control"
                         v-model.lazy="converter.value"
@@ -94,7 +100,10 @@
                                     v-for="converter in orderedConverters"
                                     v-bind:key="converter.name"
                                 >
-                                    <td class="text-nowrap">{{converter.name}}</td>
+                                    <td class="pl-2 pr-1" style="width: 5rem;">
+                                        <p class="text-nowrap">{{converter.name}}</p>
+                                        <small class="form-text text-muted">{{converter.desc}}</small>
+                                    </td>
                                     <td v-for="(cgroup, index) in step2.charas" v-bind:key="index">
                                         <img
                                             class="actress-icon"
@@ -140,12 +149,20 @@ export default {
     },
     created: function() {
         if (this.step3.converters.length < 1) {
-            this.step3.converters.push({ name: "S", value: this.step1.min });
+            this.step3.converters.push({
+                name: "S",
+                desc: "",
+                value: this.step1.min
+            });
         }
     },
     methods: {
         addConverter: function() {
-            this.step3.converters.push({ name: "", value: this.step1.min });
+            this.step3.converters.push({
+                name: "",
+                desc: "",
+                value: this.step1.min
+            });
         },
         delConverter: function(name) {
             this.step3.converters = this.step3.converters.filter(function(
