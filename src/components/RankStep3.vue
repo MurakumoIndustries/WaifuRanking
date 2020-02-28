@@ -141,8 +141,6 @@
                                             <div v-if="step3.detailScoreType==2">
                                                 <div
                                                     style="font-size:0.5rem;"
-                                                    v-for="subject in step1.subjects"
-                                                    v-bind:key="subject.name"
                                                 >{{simpleScoreDetail(chara.id)}}</div>
                                             </div>
                                         </div>
