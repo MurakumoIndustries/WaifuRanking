@@ -23,8 +23,8 @@
                         class="form-control"
                         v-model.lazy="subject.name"
                         v-on:change="changeSubject()"
-                    >
-                    <input type="number" class="form-control" v-model.lazy.number="subject.percent">
+                    />
+                    <input type="number" class="form-control" v-model.lazy.number="subject.percent" />
                 </div>
             </div>
             <div class="form-group">
@@ -40,7 +40,7 @@
                                 class="form-control"
                                 placeholder="Min"
                                 v-model.number="step1.min"
-                            >
+                            />
                         </div>
                     </div>
                     <div class="col-4">
@@ -53,7 +53,7 @@
                                 class="form-control"
                                 placeholder="Max"
                                 v-model.number="step1.max"
-                            >
+                            />
                         </div>
                     </div>
                     <div class="col-4">
@@ -66,7 +66,7 @@
                                 class="form-control"
                                 placeholder="Step"
                                 v-model.number="step1.step"
-                            >
+                            />
                         </div>
                     </div>
                 </div>
@@ -76,17 +76,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" v-model="step1.ratebyattribute">Rate by attribute
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" v-model="step1.excludecollabo">Exclude Collabo Actress
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" v-model="step1.excludeanother">Exclude Another Character
+                    <input type="checkbox" class="form-check-input" v-model="step1.ratebyattribute" />Rate by attribute
                 </label>
             </div>
         </form>
@@ -113,6 +103,11 @@ export default {
     },
     data: function() {
         return {};
+    },
+    created: function() {
+        if (this.step1.subjects.length < 1) {
+            this.step1.subjects.push({ name: "Score", percent: 1 });
+        }
     },
     methods: {
         addSubject: function() {

@@ -1,0 +1,84 @@
+@import "~bootstrap/scss/bootstrap";
+
+$material-design-icons-font-directory-path: '~material-design-icons-iconfont/dist/fonts/'; 
+@import '~material-design-icons-iconfont/src/material-design-icons';
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Yu Gothic", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body:lang(zh-TW) {
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Microsoft JhengHei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body:lang(zh-CN) {
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Microsoft YaHei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.material-icons {
+    vertical-align: top;
+}
+
+.background {
+    background-image: url("./img/background.svg");
+    background-size: 3rem 3rem;
+}
+
+.panel-heading {
+    cursor: pointer;
+}
+
+#main {
+    padding-top: 56px;
+    overflow: auto;
+    position: relative;
+}
+
+.actress-item {
+    transition: all 0.5s ease-in-out, opacity 0ms;
+}
+
+.actress-item.actress-detail {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.actress-item .card {
+    min-height: 4.5rem;
+}
+
+.actress-item .actress-header {
+    white-space: nowrap;
+}
+
+.actress-resume {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.actress-resume .actress-resume-singleline {
+    white-space: nowrap;
+}
+
+.attr-text.attr-normal {}
+
+.attr-text.attr-thunder {
+    color: #fad558
+}
+
+.attr-text.attr-gravity {
+    color: #c485fd
+}
+
+.attr-text.attr-fire {
+    color: #fe8691
+}
+
+.attr-text.attr-ice {
+    color: #92e8fe
+}
+
+.attr-text.attr-light {}
+
+.attr-text.attr-collapse {}
+
+.attr-text.attr-theory {}

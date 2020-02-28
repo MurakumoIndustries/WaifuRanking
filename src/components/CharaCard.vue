@@ -1,15 +1,15 @@
 <template>
-    <div class="actress-item my-2 col-12 col-md-6" :data-id="chara.id" :data-name="actress.name">
+    <div class="actress-item my-2" :data-id="chara.id" :data-name="actress.name">
         <div
             class="card"
             :style="'background:linear-gradient(135deg, '+actress.imageColor+', '+actress.imageColor+' 10%, transparent 25%, transparent);'"
         >
             <div class="card-body p-1 actress-header">
-                <h5 class="d-inline-block m-0">
+                <h5 class="d-inline-block m-0" style="overflow: hidden;max-width: 100%;">
                     <img
                         class="actress-icon"
                         :src="chara.icon&&('../img/chara/' + chara.icon + '.png')"
-                    >
+                    />
                     <div class="actress-name" v-if="canSplit">
                         <ruby>
                             {{nameSplit[0]}}
@@ -36,58 +36,65 @@
                     <img
                         class="another-icon"
                         :src="chara.anotherIcon&&('../img/another/' + chara.anotherIcon + '.png')"
-                    >
+                    />
                 </h5>
                 <div class="float-right">
-                    <div
-                        class="form-group"
-                        v-for="subject in subjectsForScore"
-                        v-bind:key="subject"
-                    >
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">{{subject}}</span>
-                            </div>
-                            <input
-                                type="number"
-                                class="form-control"
-                                :min="step1.min"
-                                :max="step1.max"
-                                :step="step1.step"
-                                v-model.number="score[subject]"
-                                v-on:change="validateScore(subject)"
-                            >
-                            <div class="input-group-append">
-                                <button
-                                    type="button"
-                                    class="btn btn-warning"
-                                    v-on:click="random(subject)"
-                                >Random</button>
+                    <div class="form-group form-check mt-1 mb-0 text-right">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" v-model="score.disable" />Disable
+                        </label>
+                    </div>
+                    <div v-show="!score.disable">
+                        <div
+                            class="form-group mt-1 mb-0"
+                            v-for="subject in subjectsForScore"
+                            v-bind:key="subject"
+                        >
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{subject}}</span>
+                                </div>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    :min="step1.min"
+                                    :max="step1.max"
+                                    :step="step1.step"
+                                    v-model.number="score[subject]"
+                                    v-on:change="validateScore(subject)"
+                                />
+                                <div class="input-group-append">
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        v-on:click="random(subject)"
+                                    >Random</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Total</span>
-                            </div>
-                            <input
-                                type="number"
-                                class="form-control"
-                                readonly="readonly"
-                                v-model="totalScore"
-                            >
-                            <div class="input-group-append">
-                                <button
-                                    type="button"
-                                    class="btn btn-warning"
-                                    v-on:click="randomall"
-                                >Random All</button>
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    v-on:click="maxall"
-                                >Max All</button>
+                        <div class="form-group mt-1 mb-0">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Total</span>
+                                </div>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    readonly="readonly"
+                                    v-model="totalScore"
+                                />
+                                <div class="input-group-append">
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        v-on:click="randomall"
+                                    >Random All</button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        v-on:click="maxall"
+                                    >Max All</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -164,15 +171,20 @@ export default {
             var vm = this;
             var available = this.step1.getAvailableScore();
             _.each(score, function(o, j) {
+                if (j == "totalScore" || j == "disable") {
+                    return;
+                }
                 vm.$set(score, j, _.sample(available));
             });
         },
         maxall: function(subject) {
             var score = this.score;
             var vm = this;
-            var available = this.step1.getAvailableScore();
             var max = this.step1.max;
             _.each(score, function(o, j) {
+                if (j == "totalScore" || j == "disable") {
+                    return;
+                }
                 vm.$set(score, j, max);
             });
         }

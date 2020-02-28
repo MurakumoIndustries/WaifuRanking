@@ -6,13 +6,16 @@
                 <button type="button" class="btn btn-secondary" v-on:click="allmax">All Max</button>
                 <button type="button" class="btn btn-warning" v-on:click="allrandom">All Random</button>
                 <button type="button" class="btn btn-secondary" v-on:click="allmin">All Min</button>
+                <button type="button" class="btn btn-danger" v-on:click="disableAll">Disable All</button>
+                <button type="button" class="btn btn-primary" v-on:click="enableAll">Enable All</button>
             </div>
         </div>
         <div class="row" v-for="(cgroup, index) in step2.charas" v-bind:key="index">
             <div class="col-12 text-center" v-if="index">
-                <h5>{{attributes[Number(index)]}}</h5>
+                <h3>{{attributes[Number(index)]}}</h3>
             </div>
             <CharaCard
+                class="col-12 col-md-6 col-lg-4"
                 v-for="chara in cgroup"
                 v-bind:key="chara.id"
                 v-bind:chara="chara"
@@ -64,15 +67,14 @@ export default {
             3720944093,
             3481056819,
             2009125206,
+            702277936,
             //not in use
-            3640387665,
-            1615302452,
-            1928470746,
-            2018310488,
-            3852190177,
-            4147015183,
-            1471880689,
             1560659059,
+            4147015183,
+            1078449980,
+            1928470746,
+            927000490,
+            1377445908, //nia seria an
             //not implemented
             1197654301,
             4292781688,
@@ -89,12 +91,6 @@ export default {
                 return false;
             }
             if (excludeCharaId.indexOf(chara.id) >= 0) {
-                return false;
-            }
-            if (step1.excludecollabo && chara.actress.collaborationId) {
-                return false;
-            }
-            if (step1.excludeanother && chara.anotherIcon) {
                 return false;
             }
             return true;
@@ -134,6 +130,9 @@ export default {
                     return;
                 }
                 _.each(score, function(o, j) {
+                    if (j == "totalScore" || j == "disable") {
+                        return;
+                    }
                     vm.$set(scores[i], j, max);
                 });
             });
@@ -147,6 +146,9 @@ export default {
                     return;
                 }
                 _.each(score, function(o, j) {
+                    if (j == "totalScore" || j == "disable") {
+                        return;
+                    }
                     vm.$set(scores[i], j, _.sample(available));
                 });
             });
@@ -160,8 +162,31 @@ export default {
                     return;
                 }
                 _.each(score, function(o, j) {
+                    if (j == "totalScore" || j == "disable") {
+                        return;
+                    }
                     vm.$set(scores[i], j, min);
                 });
+            });
+        },
+        disableAll: function() {
+            var scores = this.step2.scores;
+            var vm = this;
+            _.each(scores, function(score, i) {
+                if (isNaN(Number(i))) {
+                    return;
+                }
+                vm.$set(scores[i], "disable", true);
+            });
+        },
+        enableAll: function() {
+            var scores = this.step2.scores;
+            var vm = this;
+            _.each(scores, function(score, i) {
+                if (isNaN(Number(i))) {
+                    return;
+                }
+                vm.$set(scores[i], "disable", false);
             });
         }
     },

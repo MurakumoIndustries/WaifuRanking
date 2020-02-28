@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = env => {
@@ -44,17 +44,29 @@ module.exports = env => {
                     },
                 },
                 {
-                    test: /\.css$/,
-                    use: [
-                        env.NODE_ENV !== 'production' ? 'vue-style-loader' : {
+                    test: /\.(sa|sc|c)ss$/,
+                    use: [{
                             loader: MiniCssExtractPlugin.loader,
                             options: {
-                                // you can specify a publicPath here
-                                // by default it use publicPath in webpackOptions.output
-                                //publicPath: '../'
+                                //hmr: isDev,
+                            },
+                        },
+                        {
+                            loader: 'css-loader', // translates CSS into CommonJS modules
+                        },
+                        {
+                            loader: 'postcss-loader', // Run postcss actions
+                            options: {
+                                plugins: function () { // postcss plugins, can be exported to postcss.config.js
+                                    return [
+                                        require('autoprefixer')
+                                    ];
+                                }
                             }
                         },
-                        "css-loader"
+                        {
+                            loader: 'sass-loader' // compiles Sass to CSS
+                        }
                     ]
                 },
                 {
@@ -72,7 +84,8 @@ module.exports = env => {
                     options: {
                         loaders: {
 
-                        }
+                        },
+                        extractCSS: true,
                         // other vue-loader options go here
                     }
                 },
@@ -93,7 +106,9 @@ module.exports = env => {
             ]
         },
         plugins: [
-            new CleanWebpackPlugin(['docs'], { exclude: ['.nojekyll'] }),
+            new CleanWebpackPlugin({
+                cleanOnceBeforeBuildPatterns: ['**/*', '!.nojekyll']
+            }),
             new VueLoaderPlugin(),
             new HtmlWebpackPlugin({
                 template: './src/index.html'

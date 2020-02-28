@@ -4,39 +4,18 @@
         <form>
             <div class="form-group">
                 <label>Title</label>
-                <input type="text" class="form-control" v-model="step3.title">
+                <input type="text" class="form-control" v-model="step3.title" />
             </div>
             <div class="form-group">
                 <label>Header</label>
-                <input type="text" class="form-control" v-model="step3.header">
+                <input type="text" class="form-control" v-model="step3.header" />
             </div>
             <div class="form-group">
                 <label>Footer</label>
-                <input type="text" class="form-control" v-model="step3.footer">
+                <input type="text" class="form-control" v-model="step3.footer" />
             </div>
-            <div class="form-group d-none">
-                <label>Score display type</label>
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active">
-                        <input
-                            type="radio"
-                            name="scoredisplaytype"
-                            value="off"
-                            v-model="step3.scoredisplaytype"
-                            autocomplete="off"
-                            checked
-                        >Off
-                    </label>
-                    <label class="btn btn-secondary">
-                        <input
-                            type="radio"
-                            name="scoredisplaytype"
-                            value="total"
-                            v-model="step3.scoredisplaytype"
-                            autocomplete="off"
-                        >Total
-                    </label>
-                </div>
+            <div class="form-group">
+                <input type="text" class="form-control" readonly v-model="subjectDescription" />
             </div>
             <div class="form-group">
                 <label>Score Convert</label>
@@ -58,25 +37,60 @@
                             v-on:click="addConverter()"
                         >+</button>
                     </div>
-                    <input type="text" class="form-control" v-model.lazy="converter.name">
+                    <input type="text" class="form-control" v-model.lazy="converter.name" />
                     <input
                         type="text"
                         class="form-control"
                         placeholder="description"
                         v-model.lazy="converter.desc"
-                    >
+                    />
                     <input
                         type="number"
                         class="form-control"
                         v-model.lazy="converter.value"
                         v-on:change="validateConverter(converter)"
-                    >
+                    />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Detail Score</label>
+                <div class="btn-group btn-group-toggle">
+                    <label class="btn btn-secondary" :class="{active:step3.detailScoreType==0}">
+                        <input
+                            type="radio"
+                            id="detailScoreType0"
+                            name="detailScoreType"
+                            autocomplete="off"
+                            v-model.number="step3.detailScoreType"
+                            value="0"
+                        />Hide
+                    </label>
+                    <label class="btn btn-secondary" :class="{active:step3.detailScoreType==1}">
+                        <input
+                            type="radio"
+                            id="detailScoreType1"
+                            name="detailScoreType"
+                            autocomplete="off"
+                            v-model.number="step3.detailScoreType"
+                            value="1"
+                        />Detail
+                    </label>
+                    <label class="btn btn-secondary" :class="{active:step3.detailScoreType==2}">
+                        <input
+                            type="radio"
+                            id="detailScoreType2"
+                            name="detailScoreType"
+                            autocomplete="off"
+                            v-model.number="step3.detailScoreType"
+                            value="2"
+                        />Simple
+                    </label>
                 </div>
             </div>
         </form>
         <div class="card">
             <div class="card-body">
-                <div id="waifuRankingTable" class="container">
+                <div id="waifuRankingTable" class="p-2 background">
                     <div class="text-center">
                         <h3>{{step3.title}}</h3>
                     </div>
@@ -84,7 +98,7 @@
                         <h6>{{step3.header}}</h6>
                     </div>
                     <div>
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col"></th>
@@ -92,7 +106,8 @@
                                         scope="col"
                                         v-for="(cgroup, index) in step2.charas"
                                         v-bind:key="index"
-                                    >{{index?attributes[Number(index)]:UiGetText("actresses")}}</th>
+                                        class="text-center"
+                                    >{{index?attributes[Number(index)]:Ui.getText("actresses")}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,12 +120,32 @@
                                         <small class="form-text text-muted">{{converter.desc}}</small>
                                     </td>
                                     <td v-for="(cgroup, index) in step2.charas" v-bind:key="index">
-                                        <img
-                                            class="actress-icon"
+                                        <div
+                                            class="d-inline-block"
                                             v-for="chara in charaInRange(cgroup, converter)"
                                             v-bind:key="chara.id"
-                                            :src="chara.icon&&('../img/chara/' + chara.icon + '.png')"
                                         >
+                                            <div>
+                                                <img
+                                                    class="actress-icon"
+                                                    :src="chara.icon&&('../img/chara/' + chara.icon + '.png')"
+                                                />
+                                            </div>
+                                            <div v-if="step3.detailScoreType==1">
+                                                <div
+                                                    style="font-size:0.5rem;"
+                                                    v-for="subject in step1.subjects"
+                                                    v-bind:key="subject.name"
+                                                >{{subject.name}}:{{step2.scores[chara.id][subject.name]}}</div>
+                                            </div>
+                                            <div v-if="step3.detailScoreType==2">
+                                                <div
+                                                    style="font-size:0.5rem;"
+                                                    v-for="subject in step1.subjects"
+                                                    v-bind:key="subject.name"
+                                                >{{simpleScoreDetail(chara.id)}}</div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -193,6 +228,9 @@ export default {
                     if (scorePair[0] == "subjectsJson") {
                         return false;
                     }
+                    if (scorePair[1].disable) {
+                        return false;
+                    }
                     if (scorePair[1].totalScore < min) {
                         return false;
                     }
@@ -210,12 +248,11 @@ export default {
                 var chara = _.find(cgroup, function(chara) {
                     return chara.id == scoreInRange[i][0];
                 });
-                if (chara != null) result.push(chara);
+                if (chara != null) {
+                    result.push(chara);
+                }
             }
             return result;
-            //return _.filter(cgroup, function(chara) {
-            //                return _.map(scoreInRange, 0).indexOf(chara.id + "") >= 0;
-            //          });
         },
         generate: function() {
             var w = window.open("about:blank;", "_blank");
@@ -231,8 +268,14 @@ export default {
                     console.error("generate error", error);
                 });
         },
-        UiGetText: function(key, key2) {
-            return Ui.getText(key, key2);
+        simpleScoreDetail: function(id) {
+            var result = [];
+            for (const index in this.step1.subjects) {
+                result.push(
+                    this.step2.scores[id][this.step1.subjects[index].name]
+                );
+            }
+            return _.join(result, "/");
         }
     },
     computed: {
@@ -241,6 +284,11 @@ export default {
         },
         orderedConverters: function() {
             return _.orderBy(this.step3.converters, "value", "desc");
+        },
+        subjectDescription: function() {
+            var line1 = _.join(_.map(this.step1.subjects, "name"), ":");
+            var line2 = _.join(_.map(this.step1.subjects, "percent"), ":");
+            return line1 + "=" + line2;
         }
     }
 };

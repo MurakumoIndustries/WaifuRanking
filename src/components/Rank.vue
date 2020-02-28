@@ -45,13 +45,11 @@ export default {
             },
             step1: {
                 complete: false,
-                subjects: [{ name: "Score", percent: 1 }],
+                subjects: [],
                 min: 1,
                 max: 5,
                 step: 1,
-                ratebyattribute: false,
-                excludecollabo: false,
-                excludeanother: false,
+                ratebyattribute: true,
                 getAvailableScore: function() {
                     if (this.step < 0.0001) {
                         return [];
@@ -75,8 +73,8 @@ export default {
                 title: "Title",
                 header: "Header",
                 footer: "Footer",
-                scoredisplaytype: "off",
-                converters: []
+                converters: [],
+                detailScoreType: 0
             }
         };
     },
