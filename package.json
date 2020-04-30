@@ -43,7 +43,7 @@
         "bootstrap": "^4.4.1",
         "bootstrap-select": "^1.13.12",
         "dom-to-image": "^2.6.0",
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "localforage": "^1.7.3",
         "lodash": "^4.17.15",
         "material-design-icons-iconfont": "^5.0.1",
